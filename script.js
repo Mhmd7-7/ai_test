@@ -1,29 +1,39 @@
+const chat = document.getElementById('chat');
 const form = document.getElementById('chat-form');
 const input = document.getElementById('user-input');
-const chatBox = document.getElementById('chat-box');
+
+let messages = [];
 
 form.addEventListener('submit', async (e) => {
   e.preventDefault();
-  const message = input.value.trim();
-  if (!message) return;
+  const userMessage = input.value.trim();
+  if (!userMessage) return;
 
-  appendMessage('user', message);
+  appendMessage('user', userMessage);
+  messages.push({ role: 'user', content: userMessage });
   input.value = '';
 
-  const response = await fetch('/netlify/functions/chat', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ message })
-  });
+  try {
+    const res = await fetch('/netlify/functions/chat', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ messages })
+    });
+    const data = await res.json();
+    const aiReply = data.reply;
 
-  const data = await response.json();
-  appendMessage('assistant', data.reply);
+    appendMessage('assistant', aiReply);
+    messages.push({ role: 'assistant', content: aiReply });
+  } catch (err) {
+    appendMessage('assistant', 'حدث خطأ في الاتصال 😢');
+    console.error(err);
+  }
 });
 
 function appendMessage(role, text) {
   const div = document.createElement('div');
-  div.className = `message ${role}`;
+  div.className = role;
   div.textContent = text;
-  chatBox.appendChild(div);
-  chatBox.scrollTop = chatBox.scrollHeight;
+  chat.appendChild(div);
+  chat.scrollTop = chat.scrollHeight;
 }
