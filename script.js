@@ -10,7 +10,7 @@ form.addEventListener('submit', async (e) => {
   appendMessage('user', message);
   input.value = '';
 
-  const response = await fetch('/.netlify/functions/chat', {
+  const response = await fetch('/netlify/functions/chat', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ message })
