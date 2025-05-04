@@ -10,7 +10,7 @@ form.addEventListener('submit', async (e) => {
   appendMessage('user', message);
   input.value = '';
 
-  const response = await fetch('/functions/chat.js', {
+  const response = await fetch('/functions/chat', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ message })
