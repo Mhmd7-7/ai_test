@@ -1,13 +1,13 @@
 const https = require('https');
 
-exports.handler = async (event, context) => {
+exports.handler = async (event) => {
   const { message } = JSON.parse(event.body);
-  const apiKey = process.env.GROQ_API_KEY; // استخدم البيئة في Netlify
+  const apiKey = process.env.GROQ_API_KEY;
 
   if (!apiKey) {
     return {
       statusCode: 500,
-      body: JSON.stringify({ error: 'API key not found' })
+      body: JSON.stringify({ error: 'API key not set' })
     };
   }
 
@@ -28,7 +28,7 @@ exports.handler = async (event, context) => {
     }
   };
 
-  return new Promise((resolve, reject) => {
+  return new Promise((resolve) => {
     const req = https.request(options, res => {
       let response = '';
       res.on('data', chunk => response += chunk);
@@ -40,20 +40,14 @@ exports.handler = async (event, context) => {
             statusCode: 200,
             body: JSON.stringify({ reply })
           });
-        } catch (error) {
-          resolve({
-            statusCode: 500,
-            body: JSON.stringify({ error: 'Error parsing response' })
-          });
+        } catch (e) {
+          resolve({ statusCode: 500, body: 'Invalid response' });
         }
       });
     });
 
-    req.on('error', error => {
-      resolve({
-        statusCode: 500,
-        body: JSON.stringify({ error: 'Request failed' })
-      });
+    req.on('error', () => {
+      resolve({ statusCode: 500, body: 'Request error' });
     });
 
     req.write(data);
