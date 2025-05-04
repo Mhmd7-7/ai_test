@@ -1,19 +1,19 @@
 const https = require('https');
 
 exports.handler = async (event) => {
-  const { message } = JSON.parse(event.body);
+  const { messages } = JSON.parse(event.body);
   const apiKey = process.env.GROQ_API_KEY;
 
   if (!apiKey) {
     return {
       statusCode: 500,
-      body: JSON.stringify({ error: 'API key not set' })
+      body: JSON.stringify({ error: 'API key not found' })
     };
   }
 
   const data = JSON.stringify({
     model: "llama3-70b-8192",
-    messages: [{ role: 'user', content: message }],
+    messages: messages,
     temperature: 0.7
   });
 
@@ -40,14 +40,20 @@ exports.handler = async (event) => {
             statusCode: 200,
             body: JSON.stringify({ reply })
           });
-        } catch (e) {
-          resolve({ statusCode: 500, body: 'Invalid response' });
+        } catch {
+          resolve({
+            statusCode: 500,
+            body: JSON.stringify({ error: 'Failed to parse response' })
+          });
         }
       });
     });
 
     req.on('error', () => {
-      resolve({ statusCode: 500, body: 'Request error' });
+      resolve({
+        statusCode: 500,
+        body: JSON.stringify({ error: 'Request failed' })
+      });
     });
 
     req.write(data);
