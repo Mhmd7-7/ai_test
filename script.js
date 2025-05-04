@@ -1,39 +1,29 @@
-const chat = document.getElementById('chat');
 const form = document.getElementById('chat-form');
 const input = document.getElementById('user-input');
-
-let messages = [];
+const chatBox = document.getElementById('chat-box');
 
 form.addEventListener('submit', async (e) => {
   e.preventDefault();
-  const userMessage = input.value.trim();
-  if (!userMessage) return;
+  const message = input.value.trim();
+  if (!message) return;
 
-  appendMessage('user', userMessage);
-  messages.push({ role: 'user', content: userMessage });
+  appendMessage('user', message);
   input.value = '';
 
-  try {
-    const res = await fetch('/functions/chat', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ messages })
-    });
-    const data = await res.json();
-    const aiReply = data.reply;
+  const response = await fetch('/functions/chat', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ message })
+  });
 
-    appendMessage('assistant', aiReply);
-    messages.push({ role: 'assistant', content: aiReply });
-  } catch (err) {
-    appendMessage('assistant', 'حدث خطأ في الاتصال 😢');
-    console.error(err);
-  }
+  const data = await response.json();
+  appendMessage('assistant', data.reply);
 });
 
 function appendMessage(role, text) {
   const div = document.createElement('div');
-  div.className = role;
+  div.className = `message ${role}`;
   div.textContent = text;
-  chat.appendChild(div);
-  chat.scrollTop = chat.scrollHeight;
+  chatBox.appendChild(div);
+  chatBox.scrollTop = chatBox.scrollHeight;
 }
