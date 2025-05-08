@@ -28,6 +28,7 @@ form.addEventListener('submit', async (e) => {
 function appendMessage(role, text) {
   const div = document.createElement('div');
   div.className = `message ${role}`;
+  text = text.replace(/\*\*(.*?)\*\*/g, '<b>$1</b>');
   div.textContent = text;
   chatBox.appendChild(div);
   chatBox.scrollTop = chatBox.scrollHeight;
