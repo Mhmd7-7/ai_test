@@ -14,12 +14,7 @@ This project serves as a basic frontend interface for experimenting with AI mode
 - **Netlify** – For deployment and hosting  
 
 ## 📁 Project Structure
-ai_test/
-├── index.html        # Main HTML page
-├── style.css         # Styling for the UI
-├── script.js         # AI logic and interactivity
-├── functions/        # Additional helper files or functions
-└── netlify.toml      # Netlify deployment configuration
+\n ai_test/ │ \n├── index.html # Main HTML page \n├── style.css # Styling for the UI \n├── script.js # AI logic and interactivity \n├── functions/ # Additional helper files or functions \n└── netlify.toml # Netlify deployment configuration
 
 
 
