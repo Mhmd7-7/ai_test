@@ -109,7 +109,6 @@ button {
 pre {
   margin: 0;
   padding: 1em;
-  overflow-x: auto;
   color: #fff;
   font-family: monospace;
 }
