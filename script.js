@@ -25,6 +25,14 @@ form.addEventListener('submit', async (e) => {
   messages.push({ role: 'assistant', content: data.reply });
 });
 
+function copyCode(btn) {
+  const code = btn.closest('.code-block').querySelector('code').innerText;
+  navigator.clipboard.writeText(code).then(() => {
+    btn.innerText = "Copied!";
+    setTimeout(() => btn.innerText = "Copy", 2000);
+  });
+}
+
 function appendMessage(role, text) {
   const div = document.createElement('div');
   div.className = `message ${role}`;
