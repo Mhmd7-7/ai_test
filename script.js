@@ -51,7 +51,7 @@ function appendMessage(role, text) {
     </div>
   `;
 });
-
+  text = text.replace(/`(.*?)`/gs, '<code>$1</code>');
   div.innerHTML = text;
   chatBox.appendChild(div);
   chatBox.scrollTop = chatBox.scrollHeight;
