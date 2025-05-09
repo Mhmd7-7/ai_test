@@ -23,7 +23,7 @@ exports.handler = async (event) => {
     method: 'POST',
     headers: {
       'Authorization': `Bearer ${apiKey}`,
-      'Content-Type': 'application/json',
+      'Content-Type': 'application/json; charset=utf-8',
       'Content-Length': Buffer.byteLength(data)
     }
   };
