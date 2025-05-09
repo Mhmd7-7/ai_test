@@ -29,7 +29,21 @@ function appendMessage(role, text) {
   const div = document.createElement('div');
   div.className = `message ${role}`;
   text = text.replace(/\*\*(.*?)\*\*/g, '<b>$1</b>');
-  text = text.replace(/```(.*?)```/gs, '<pre><code>$1</code></pre>');
+  text = text.replace(/```(.*?)```/gs, (_, code) => {
+  const escaped = code
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;");
+  
+  return `
+    <div class="code-block">
+      <div class="code-header">
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      </div>
+      <pre><code>${escaped}</code></pre>
+    </div>
+  `;
+});
+
   div.innerHTML = text;
   chatBox.appendChild(div);
   chatBox.scrollTop = chatBox.scrollHeight;
